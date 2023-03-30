@@ -5,16 +5,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
-import hashlib
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from win10toast import ToastNotifier
 
 # make chrome log requests
 options = Options()
-options.headless = True
+options.add_argument('ignore-certificate-errors')
+options.add_argument('--headless=new')
 capabilities = DesiredCapabilities.CHROME
 capabilities["loggingPrefs"] = {"performance": "ALL"}  # newer: goog:loggingPrefs
 driver = webdriver.Chrome(
-    desired_capabilities=capabilities, executable_path="./chromedriver",  options=options
+    desired_capabilities=capabilities, service=Service(ChromeDriverManager().install()),  options=options
 )
 
 # fetch a site that does xhr requests
@@ -34,7 +36,7 @@ totalData = len(data)
 
 currenttotalData = totalData
 print("Olt Monitor Running Bosku")
-sleep(10)
+sleep(120)
 while True:
     try:
         driver.get("https://olt.itsnot.my.id/lol.php")
@@ -64,6 +66,7 @@ while True:
         if currenttotalData == newtotalData:
             print('Belum Ada Los , OTW refresh')
             continue
+
         elif currenttotalData < newtotalData :
             toast.show_toast(
                 "Notification",
