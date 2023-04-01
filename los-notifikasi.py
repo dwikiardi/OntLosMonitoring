@@ -36,7 +36,7 @@ totalData = len(data)
 
 currenttotalData = totalData
 print("Olt Monitor Running Bosku")
-sleep(120)
+sleep(5)
 while True:
     try:
         driver.get("https://olt.itsnot.my.id/lol.php")
@@ -46,7 +46,6 @@ while True:
 
         table = driver.find_element(By.XPATH, '//*[@id="uhu"]').text
         data = table.split('\n')
-
         totalData = len(data)
         currenttotalData = totalData
 
@@ -59,12 +58,20 @@ while True:
 
         table = driver.find_element(By.XPATH, '//*[@id="uhu"]').text
         data = table.split('\n')
-
         totalData = len(data)
         newtotalData= totalData
 
+        # for datalos in range(10, 10):
+        #     log = data[datalos]
+
         if currenttotalData == newtotalData:
+            print('============================================')
             print('Belum Ada Los , OTW refresh')
+            print('============================================')
+            for datalos in range(currenttotalData - 1 , newtotalData):
+                print('Data Los Terakhir :')
+                print(data[datalos])
+            print('============================================')
             continue
 
         elif currenttotalData < newtotalData :
@@ -76,7 +83,13 @@ while True:
                 threaded = True,
             )
             # notify
+            print('============================================')
             print("Ada yang los check bos")
+            print('============================================')
+            for datalos in range(currenttotalData - 1 , newtotalData):
+                print('Data Los Terbaru :')
+                print(data[datalos])
+            print('============================================')
             # again read the website
             driver.get("https://olt.itsnot.my.id/lol.php")
             element = WebDriverWait(driver, 500).until(
