@@ -8,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from win10toast import ToastNotifier
+import datetime
 
 # make chrome log requests
 options = Options()
@@ -36,7 +37,6 @@ totalData = len(data)
 
 currenttotalData = totalData
 print("Olt Monitor Running Bosku")
-sleep(5)
 while True:
     try:
         driver.get("https://olt.itsnot.my.id/lol.php")
@@ -60,36 +60,41 @@ while True:
         data = table.split('\n')
         totalData = len(data)
         newtotalData= totalData
-
-        # for datalos in range(10, 10):
-        #     log = data[datalos]
+        refreshTime = datetime.datetime.now()
 
         if currenttotalData == newtotalData:
             print('============================================')
-            print('Belum Ada Los , OTW refresh')
+            print('Belum Ada Los , OTW refresh, Last Update : ', refreshTime)
             print('============================================')
             for datalos in range(currenttotalData - 1 , newtotalData):
                 print('Data Los Terakhir :')
                 print(data[datalos])
             print('============================================')
+            toast.show_toast(
+                "Notification",
+                "Ada yang udah up check bos",
+                duration = 5,
+                icon_path = "icon.ico",
+                threaded=True,
+            )
             continue
 
         elif currenttotalData < newtotalData :
-            toast.show_toast(
-                "Notification",
-                "Ada yang los check bos",
-                duration = 1200,
-                icon_path = "icon.ico",
-                threaded = True,
-            )
             # notify
             print('============================================')
-            print("Ada yang los check bos")
+            print("Ada yang los check bos , Last Update : ", refreshTime)
             print('============================================')
             for datalos in range(currenttotalData - 1 , newtotalData):
                 print('Data Los Terbaru :')
                 print(data[datalos])
             print('============================================')
+            toast.show_toast(
+                "Notification",
+                "Ada yang los check bos",
+                duration = 5,
+                icon_path = "icon.ico",
+                threaded = True,
+            )
             # again read the website
             driver.get("https://olt.itsnot.my.id/lol.php")
             element = WebDriverWait(driver, 500).until(
@@ -102,15 +107,15 @@ while True:
             sleep(120)
             continue
         else :
+            # notify
+            print("Ada yang udah up check bos , Last Update :", refreshTime)
             toast.show_toast(
                 "Notification",
                 "Ada yang udah up check bos",
-                duration = 1200,
+                duration = 5,
                 icon_path = "icon.ico",
                 threaded = True,
             )
-            # notify
-            print("Ada yang udah up check bos")
             # again read the website
             driver.get("https://olt.itsnot.my.id/lol.php")
             element = WebDriverWait(driver, 500).until(
