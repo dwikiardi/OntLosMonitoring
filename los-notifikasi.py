@@ -70,13 +70,6 @@ while True:
                 print('Data Los Terakhir :')
                 print(data[datalos])
             print('============================================')
-            toast.show_toast(
-                "Notification",
-                "Ada yang udah up check bos",
-                duration = 5,
-                icon_path = "icon.ico",
-                threaded=True,
-            )
             continue
 
         elif currenttotalData < newtotalData :
