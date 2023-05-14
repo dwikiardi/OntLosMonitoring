@@ -88,6 +88,7 @@ while True:
                 icon_path = "icon.ico",
                 threaded = True,
             )
+            sleep(5)
             # again read the website
             driver.get("https://olt.itsnot.my.id/lol.php")
             element = WebDriverWait(driver, 500).until(
@@ -110,6 +111,7 @@ while True:
                 threaded = True,
             )
             # again read the website
+            sleep(5)
             driver.get("https://olt.itsnot.my.id/lol.php")
             element = WebDriverWait(driver, 500).until(
             EC.presence_of_element_located((By.XPATH, "/html/body/div/table/tbody/tr[1]"))
