@@ -9,6 +9,7 @@ from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from win10toast import ToastNotifier
 import datetime
+from winotify import Notification, audio
 
 # make chrome log requests
 options = Options()
@@ -25,7 +26,7 @@ driver.get("https://olt.itsnot.my.id/lol.php")
 sleep(5)  # wait for the requests to take place
 
 #notification
-toast = ToastNotifier()
+# toast = ToastNotifier()
 
 # try:
 element = WebDriverWait(driver, 500).until(
@@ -81,13 +82,9 @@ while True:
                 print('Data Los Terbaru :')
                 print(data[datalos])
             print('============================================')
-            toast.show_toast(
-                "Notification",
-                "Ada yang los check bos",
-                duration = 5,
-                icon_path = "icon.ico",
-                threaded = True,
-            )
+            toastDown = Notification(app_id='NVZ OLT MONITORING', title='Notification' , msg='Ada yang los check bos')
+            toastDown.set_audio(audio.LoopingAlarm2, loop=False)
+            toastDown.show()
             sleep(5)
             # again read the website
             driver.get("https://olt.itsnot.my.id/lol.php")
@@ -100,16 +97,14 @@ while True:
             currenttotalData = totalData
             sleep(120)
             continue
-        else :
+        elif currenttotalData > newtotalData :
             # notify
+            print('============================================')
             print("Ada yang udah up check bos , Last Update :", refreshTime)
-            toast.show_toast(
-                "Notification",
-                "Ada yang udah up check bos",
-                duration = 5,
-                icon_path = "icon.ico",
-                threaded = True,
-            )
+            print('============================================')
+            toastUp = Notification(app_id='NVZ OLT MONITORING', title='Notification' , msg='Ada yang udah up check bos')
+            toastUp.set_audio(audio.LoopingAlarm2, loop=False)
+            toastUp.show()
             # again read the website
             sleep(5)
             driver.get("https://olt.itsnot.my.id/lol.php")
